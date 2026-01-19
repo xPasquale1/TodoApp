@@ -1,0 +1,109 @@
+import 'package:flutter/material.dart';
+import 'package:todo_app/components/database.dart';
+import 'package:todo_app/models/task.dart';
+import 'package:todo_app/pages/task_view_page.dart';
+import 'package:todo_app/widgets/task_widget.dart';
+
+class TasksPage extends StatefulWidget {
+  final String pageTitle;
+
+  const TasksPage({super.key, required this.pageTitle});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _TaskPageState();
+  }
+}
+
+class _TaskPageState extends State<TasksPage> {
+  List<Task> tasks = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadTasks();
+  }
+
+  Future<void> loadTasks() async {
+    tasks = await DB.getAllTasks();
+    setState(() {});
+  }
+
+  void onTaskCompleted(Task task) async {
+    await DB.updateTask(task);
+    setState(() {});
+  }
+
+  void onTaskPressed(Task task) async {
+    final shouldDelete = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => TaskViewPage(task: task)),
+    );
+
+    await DB.updateTask(task);
+    setState(() {});
+
+    if (shouldDelete == null || !shouldDelete) return;
+    await DB.deleteTask(task);
+    setState(() {
+      tasks.remove(task);
+    });
+  }
+
+  Future<void> addTaskDialog() async {
+    final String? title = await showDialog(
+      context: context,
+      builder: (context) {
+        final controller = TextEditingController();
+        return AlertDialog(
+          title: const Text('Add new Task'),
+          content: TextField(
+            controller: controller,
+            autofocus: true,
+            decoration: const InputDecoration(hintText: 'Add new Task'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context, controller.text),
+              child: const Text('Add Task'),
+            ),
+          ],
+        );
+      },
+    );
+    if (title == null || title.isEmpty) return;
+    Task? task = await DB.addTask(title, '');
+    if (task == null) return;
+    setState(() {
+      tasks.add(task);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: BackButton(),
+        title: Text(widget.pageTitle, style: TextStyle(fontSize: 32)),
+        centerTitle: true,
+      ),
+      body: ListView(
+        children: tasks.map((task) {
+          return TaskItem(
+            task: task,
+            onToggle: (task) => onTaskCompleted(task),
+            onPress: (task) => onTaskPressed(task),
+          );
+        }).toList(),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: addTaskDialog,
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
