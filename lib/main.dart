@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/pages/tasks_page.dart';
+import 'package:todo_app/components/page_controller.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.dark(brightness: Brightness.dark),
       ),
-      home: TasksPage(pageTitle: 'Tasks'),
+      home: PagesController(),
     );
   }
 }

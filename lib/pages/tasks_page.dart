@@ -5,9 +5,7 @@ import 'package:todo_app/pages/task_view_page.dart';
 import 'package:todo_app/widgets/task_widget.dart';
 
 class TasksPage extends StatefulWidget {
-  final String pageTitle;
-
-  const TasksPage({super.key, required this.pageTitle});
+  const TasksPage({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -87,8 +85,10 @@ class _TaskPageState extends State<TasksPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton(),
-        title: Text(widget.pageTitle, style: TextStyle(fontSize: 32)),
+        title: Text(
+          'Tasks',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32),
+        ),
         centerTitle: true,
       ),
       body: ListView(

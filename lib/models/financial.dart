@@ -1,34 +1,34 @@
-class Task {
+class Financial {
   final int id;
   final DateTime date;
-  String title;
+  double amount;
+  String receiver;
   String description;
-  bool completed = false;
 
-  Task({
+  Financial({
     required this.id,
     required this.date,
-    required this.title,
+    this.amount = 0,
+    this.receiver = '',
     this.description = '',
-    this.completed = false,
   });
 
   Map<String, Object> toMap() {
     return {
-      'title': title,
       'date': date.millisecondsSinceEpoch,
+      'amount': amount,
+      'receiver': receiver,
       'description': description,
-      'completed': completed ? 1 : 0,
     };
   }
 
-  static Task fromMap(Map<String, Object?> map) {
-    return Task(
+  static Financial fromMap(Map<String, Object?> map) {
+    return Financial(
       id: map['id'] as int,
       date: DateTime.fromMillisecondsSinceEpoch(map['date'] as int),
-      title: map['title'] as String,
+      amount: map['amount'] as double,
+      receiver: map['receiver'] as String,
       description: map['description'] as String,
-      completed: (map['completed'] as int) == 1,
     );
   }
 }
