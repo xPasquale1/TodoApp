@@ -1,3 +1,4 @@
+import 'package:daily_app/components/currency.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -10,11 +11,10 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  final List<DropdownMenuEntry<String>> currencies = [
-    DropdownMenuEntry(value: "de_DE", label: "de_DE"),
-    DropdownMenuEntry(value: "en_US", label: "en_US"),
-    DropdownMenuEntry(value: "en_UK", label: "en_UK"),
-  ];
+  void onCurrencySelected(String? currency) {
+    if (currency == null) return;
+    Currency.changeCurrency(currency);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +33,19 @@ class _SettingsPageState extends State<SettingsPage> {
           borderRadius: BorderRadius.circular(16),
           color: Colors.grey.shade900,
         ),
-        child: Expanded(
-          child: DropdownMenu<String>(
-            label: Text(
-              'Currency',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-            ),
-            width: double.infinity,
-            dropdownMenuEntries: currencies,
-            initialSelection: currencies.first.value,
+        child: DropdownMenu<String>(
+          label: Text(
+            'Currency',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
           ),
+          width: double.infinity,
+          dropdownMenuEntries: Currency.getAllCurrencies()
+              .map(
+                (currency) =>
+                    DropdownMenuEntry(value: currency, label: currency),
+              )
+              .toList(),
+          onSelected: onCurrencySelected,
         ),
       ),
     );

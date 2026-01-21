@@ -1,7 +1,9 @@
+import 'package:daily_app/components/currency.dart';
 import 'package:flutter/material.dart';
 import 'package:daily_app/components/page_controller.dart';
 
 void main() async {
+  Currency.init();
   runApp(const MyApp());
 }
 

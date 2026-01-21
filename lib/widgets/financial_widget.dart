@@ -1,5 +1,5 @@
+import 'package:daily_app/components/currency.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:daily_app/models/financial.dart';
 
 class FinancialWidget extends StatefulWidget {
@@ -19,12 +19,6 @@ class FinancialWidget extends StatefulWidget {
 }
 
 class _TaskViewState extends State<FinancialWidget> {
-  final euroFormatter = NumberFormat.simpleCurrency(
-    locale: 'de_DE',
-    name: 'EUR',
-    decimalDigits: 2
-  );
-
   void onPress() {
     widget.onPress(widget.financial);
   }
@@ -51,7 +45,7 @@ class _TaskViewState extends State<FinancialWidget> {
             Align(
               alignment: Alignment.centerRight,
               child: Text(
-                widget.financial.amount >= 0 ? '+${euroFormatter.format(widget.financial.amount)}' : euroFormatter.format(widget.financial.amount),
+                widget.financial.amount >= 0 ? '+${Currency.doubleToString(widget.financial.amount)}' : Currency.doubleToString(widget.financial.amount),
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24, color: widget.financial.amount >= 0 ? Colors.green : Colors.red),
               ),
             ),

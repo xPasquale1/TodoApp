@@ -1,5 +1,5 @@
+import 'package:daily_app/components/currency.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:daily_app/components/database.dart';
 import 'package:daily_app/models/financial.dart';
 import 'package:daily_app/pages/financial_view_page.dart';
@@ -17,12 +17,6 @@ class FinancialsPage extends StatefulWidget {
 class _FinancialsPageState extends State<FinancialsPage> {
   double total = 0;
   List<Financial> financials = [];
-
-  final euroFormatter = NumberFormat.simpleCurrency(
-    locale: 'de_DE',
-    name: 'EUR',
-    decimalDigits: 2,
-  );
 
   @override
   void initState() {
@@ -115,9 +109,7 @@ class _FinancialsPageState extends State<FinancialsPage> {
     );
     if (result == null) return;
     if (!result.containsKey('amount')) return;
-    double amount = NumberFormat.decimalPattern(
-      'de_DE',
-    ).parse(result['amount'] as String).toDouble();
+    double amount = Currency.stringToDouble(result['amount'] as String);
     String description = result.containsKey('description')
         ? result['description'] as String
         : '';
@@ -149,8 +141,8 @@ class _FinancialsPageState extends State<FinancialsPage> {
             alignment: Alignment.center,
             child: Text(
               total >= 0
-                  ? '+${euroFormatter.format(total)}'
-                  : euroFormatter.format(total),
+                  ? '+${Currency.doubleToString(total)}'
+                  : Currency.doubleToString(total),
               style: TextStyle(
                 color: total >= 0 ? Colors.green : Colors.red,
                 fontWeight: FontWeight.bold,

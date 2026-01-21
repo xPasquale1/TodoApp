@@ -1,5 +1,5 @@
+import 'package:daily_app/components/currency.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:daily_app/components/database.dart';
 import 'package:daily_app/models/financial.dart';
 import 'package:daily_app/models/task.dart';
@@ -15,12 +15,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int openTasksCount = 0;
-
-  final euroFormatter = NumberFormat.simpleCurrency(
-    locale: 'de_DE',
-    name: 'EUR',
-    decimalDigits: 2,
-  );
 
   Future<double> calculateTotal() async {
     List<Financial> financials = await DB.getAllFinancials();
@@ -119,8 +113,8 @@ class _HomePageState extends State<HomePage> {
                     }
                     return Text(
                       snapshot.data! >= 0
-                          ? '+${euroFormatter.format(snapshot.data)}'
-                          : euroFormatter.format(snapshot.data),
+                          ? '+${Currency.doubleToString(snapshot.data!)}'
+                          : Currency.doubleToString(snapshot.data!),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 32,
