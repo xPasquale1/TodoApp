@@ -15,7 +15,7 @@ class Currency {
   }
 
   static double stringToDouble(String text) {
-    return NumberFormat.simpleCurrency(name: currency).parse(text).toDouble();
+    return NumberFormat.decimalPattern().parse(text).toDouble();
   }
 
   static void changeCurrency(String newCurrency) {
